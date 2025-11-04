@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IGCSE Chemistry (0620) Hub</title>
+<style>
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background: #f3f7ff;
+  color: #222;
+}
+header {
+  background: #004aad;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+nav {
+  background: #002e7a;
+  text-align: center;
+  padding: 0.5rem;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+nav a:hover { color: #ffd700; }
+
+section { display: none; padding: 20px; }
+section.active { display: block; }
+h2 { color: #003b88; text-align:center; }
+
+/* Periodic Table styling */
+.periodic-container {
+  display: grid;
+  grid-template-columns: repeat(18, 56px);
+  grid-auto-rows: 56px;
+  grid-gap: 6px;
+  justify-content: center;
+  margin: 20px auto;
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  width: fit-content;
+}
+.pt-element {
+  border: 1px solid #d0d6e6;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 13px;
+  padding: 6px 4px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+.pt-element small { display:block; font-size:10px; color:#444; margin-top:3px; font-weight:600; }
+.metal { background:#ffd6a5; }
+.nonmetal { background:#bde0fe; }
+.noble { background:#caffbf; }
+.transition { background:#f9c74f; }
+.lan-act { background:#fcd5ce; }
+
+/* lan/act separate row containers (14 columns each) */
+.lan-container, .act-container {
+  display: grid;
+  grid-template-columns: repeat(14, 56px);
+  grid-gap: 6px;
+  justify-content: center;
+  margin: 10px auto 30px;
+  width: fit-content;
+}
+
+/* Solubility charts */
+.solubility-box {
+  max-width: 800px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 30px auto;
+  padding: 20px 30px;
+  line-height: 1.8;
+}
+.solubility-box h3 { text-align:center; color:#c00; }
+.arrow {
+  border-top: 2px dashed #222;
+  height: 2px;
+  width: 100%;
+  margin: 10px 0;
+}
+.red { color:#c00; font-weight:bold; }
+.blue { color:#004aad; font-weight:bold; }
+
+/* Summary */
+.summary-box {
+  max-width: 900px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 30px auto;
+  padding: 20px 30px;
+}
+.summary-flex {
+  display:flex;
+  justify-content: space-around;
+  flex-wrap:wrap;
+  text-align:center;
+}
+.summary-item {
+  width: 250px;
+  background:#f7f9ff;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  margin:10px;
+}
+.summary-item h4 {
+  background:#ffde59;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:6px;
+}
+.example { color:#0055cc; font-weight:bold; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+th { background-color: #004aad; color: white; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IGCSE Chemistry (0620) Helper</h1>
+  <p>Periodic Table • Solubility Rules • Common Ions • Acids, Bases & Salts</p>
+</header>
+
+<nav>
+  <a onclick="showSection('periodic')">Periodic Table</a>
+  <a onclick="showSection('solubility')">Solubility Rules</a>
+  <a onclick="showSection('ions')">NOHCSP</a>
+  <a onclick="showSection('summary')">Acid–Base–Salt Summary</a>
+</nav>
+
+<!-- COMPLETE PERIODIC TABLE -->
+<section id="periodic" class="active">
+  <h2>Periodic Table of Elements (All 118)</h2>
+  <div class="periodic-container" id="ptable"></div>
+
+  <!-- lanthanides and actinides will be generated below the main grid -->
+  <div id="lanRow" class="lan-container" aria-label="Lanthanides"></div>
+  <div id="actRow" class="act-container" aria-label="Actinides"></div>
+</section>
+
+<!-- SOLUBILITY -->
+<section id="solubility">
+  <h2>Solubility Rules</h2>
+  <div class="solubility-box">
+    <h3>All acids are soluble in water with no exception</h3>
+    <div class="arrow"></div>
+    <p><span class="red">Cl⁻</span> → except <b>AgCl</b>, <b>PbCl₂</b></p>
+    <p><span class="red">Br⁻</span> → except <b>AgBr</b>, <b>PbBr₂</b></p>
+    <p><span class="red">I⁻</span> → except <b>AgI</b>, <b>PbI₂</b></p>
+    <p><span class="red">SO₄²⁻</span> → except <b>PbSO₄</b>, <b>BaSO₄</b>, <b>CaSO₄</b></p>
+    <div class="arrow"></div>
+    <p class="blue">All nitrates (NO₃⁻), ammonium salts (NH₄⁺), and Group 1 salts (Na⁺, K⁺) are soluble</p>
+  </div>
+
+  <div class="solubility-box">
+    <h3>All bases are insoluble except:</h3>
+    <p class="blue">All Group 1 hydroxides, carbonates, and oxides</p>
+    <p class="blue">Ammonium (NH₄⁺) hydroxides, carbonates, and oxides</p>
+    <div class="arrow"></div>
+    <p><b>Ba(OH)₂</b> and <b>Ca(OH)₂</b> are slightly soluble (remember “BaCa”)</p>
+  </div>
+</section>
+
+<!-- NOHCSP -->
+<section id="ions">
+  <h2>NOHCSP</h2>
+  <table>
+    <tr><th>Ion</th><th>Formula</th><th>Charge</th></tr>
+    <tr><td>Ammonium</td><td>NH₄⁺</td><td>+1</td></tr>
+    <tr><td>Hydroxide</td><td>OH⁻</td><td>-1</td></tr>
+    <tr><td>Nitrate</td><td>NO₃⁻</td><td>-1</td></tr>
+    <tr><td>Carbonate</td><td>CO₃²⁻</td><td>-2</td></tr>
+    <tr><td>Sulfate</td><td>SO₄²⁻</td><td>-2</td></tr>
+    <tr><td>Phosphate</td><td>PO₄³⁻</td><td>-3</td></tr>
+  </table>
+</section>
+
+
+<!-- ACID–BASE–SALT SUMMARY -->
+<section id="summary">
+  <h2>Let's Summarize: Acids, Bases, and Salts</h2>
+  <div class="summary-box">
+    <div class="summary-flex">
+      <div class="summary-item">
+        <h4>Acid</h4>
+        <p>Made of <b>H</b> and a <b>non-metal</b>.</p>
+        <p>Example: <span class="example">HCl, H₂SO₄</span></p>
+      </div>
+      <div class="summary-item">
+        <h4>Base</h4>
+        <p>Made of a <b>metal</b> or <b>NH₄⁺</b> with <b>OH⁻</b> or <b>O²⁻</b>.</p>
+        <p>Example: <span class="example">NaOH, CaO, NH₄OH</span></p>
+      </div>
+      <div class="summary-item">
+        <h4>Salt</h4>
+        <p>Formed when <b>H</b> in an acid is replaced by a <b>metal</b> or <b>NH₄⁺</b>.</p>
+        <p>Example: <span class="example">NaCl, NH₄Cl, MgBr₂</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// navigation (keeps existing behavior; not broken)
+function showSection(id) {
+  document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// -------------------- PERIODIC TABLE LAYOUT (JS generator) --------------------
+// We place each element with grid-column/grid-row for accurate layout.
+// Lanthanides and actinides are generated into separate rows under the main grid.
+
+const mainElements = [
+  // row 1
+  {s:"H",  n:1, type:"nonmetal", col:1,  row:1},
+  {s:"He", n:2,  type:"noble",    col:18, row:1},
+
+  // row 2
+  {s:"Li", n:3,  type:"metal",    col:1,  row:2},
+  {s:"Be", n:4,  type:"metal",    col:2,  row:2},
+  {s:"B",  n:5,  type:"nonmetal", col:13, row:2},
+  {s:"C",  n:6,  type:"nonmetal", col:14, row:2},
+  {s:"N",  n:7,  type:"nonmetal", col:15, row:2},
+  {s:"O",  n:8,  type:"nonmetal", col:16, row:2},
+  {s:"F",  n:9,  type:"nonmetal", col:17, row:2},
+  {s:"Ne", n:10, type:"noble",    col:18, row:2},
+
+  // row 3
+  {s:"Na", n:11, type:"metal",    col:1,  row:3},
+  {s:"Mg", n:12, type:"metal",    col:2,  row:3},
+  {s:"Al", n:13, type:"metal",    col:13, row:3},
+  {s:"Si", n:14, type:"nonmetal", col:14, row:3},
+  {s:"P",  n:15, type:"nonmetal", col:15, row:3},
+  {s:"S",  n:16, type:"nonmetal", col:16, row:3},
+  {s:"Cl", n:17, type:"nonmetal", col:17, row:3},
+  {s:"Ar", n:18, type:"noble",    col:18, row:3},
+
+  // row 4
+  {s:"K",  n:19, type:"metal",    col:1,  row:4},
+  {s:"Ca", n:20, type:"metal",    col:2,  row:4},
+  {s:"Sc", n:21, type:"transition",col:3, row:4},
+  {s:"Ti", n:22, type:"transition",col:4, row:4},
+  {s:"V",  n:23, type:"transition",col:5, row:4},
+  {s:"Cr", n:24, type:"transition",col:6, row:4},
+  {s:"Mn", n:25, type:"transition",col:7, row:4},
+  {s:"Fe", n:26, type:"transition",col:8, row:4},
+  {s:"Co", n:27, type:"transition",col:9, row:4},
+  {s:"Ni", n:28, type:"transition",col:10,row:4},
+  {s:"Cu", n:29, type:"transition",col:11,row:4},
+  {s:"Zn", n:30, type:"transition",col:12,row:4},
+  {s:"Ga", n:31, type:"metal",    col:13,row:4},
+  {s:"Ge", n:32, type:"metal",    col:14,row:4},
+  {s:"As", n:33, type:"nonmetal", col:15,row:4},
+  {s:"Se", n:34, type:"nonmetal", col:16,row:4},
+  {s:"Br", n:35, type:"nonmetal", col:17,row:4},
+  {s:"Kr", n:36, type:"noble",    col:18,row:4},
+
+  // row 5
+  {s:"Rb", n:37, type:"metal",    col:1, row:5},
+  {s:"Sr", n:38, type:"metal",    col:2, row:5},
+  {s:"Y",  n:39, type:"transition",col:3, row:5},
+  {s:"Zr", n:40, type:"transition",col:4, row:5},
+  {s:"Nb", n:41, type:"transition",col:5, row:5},
+  {s:"Mo", n:42, type:"transition",col:6, row:5},
+  {s:"Tc", n:43, type:"transition",col:7, row:5},
+  {s:"Ru", n:44, type:"transition",col:8, row:5},
+  {s:"Rh", n:45, type:"transition",col:9, row:5},
+  {s:"Pd", n:46, type:"transition",col:10,row:5},
+  {s:"Ag", n:47, type:"transition",col:11,row:5},
+  {s:"Cd", n:48, type:"transition",col:12,row:5},
+  {s:"In", n:49, type:"metal",    col:13,row:5},
+  {s:"Sn", n:50, type:"metal",    col:14,row:5},
+  {s:"Sb", n:51, type:"metal",    col:15,row:5},
+  {s:"Te", n:52, type:"nonmetal", col:16,row:5},
+  {s:"I",  n:53, type:"nonmetal", col:17,row:5},
+  {s:"Xe", n:54, type:"noble",    col:18,row:5},
+
+  // row 6
+  {s:"Cs", n:55, type:"metal",    col:1, row:6},
+  {s:"Ba", n:56, type:"metal",    col:2, row:6},
+  // La place-holder (we will put lanth. row separately)
+  {s:"Hf", n:72, type:"transition",col:4, row:6},
+  {s:"Ta", n:73, type:"transition",col:5, row:6},
+  {s:"W",  n:74, type:"transition",col:6, row:6},
+  {s:"Re", n:75, type:"transition",col:7, row:6},
+  {s:"Os", n:76, type:"transition",col:8, row:6},
+  {s:"Ir", n:77, type:"transition",col:9, row:6},
+  {s:"Pt", n:78, type:"transition",col:10,row:6},
+  {s:"Au", n:79, type:"transition",col:11,row:6},
+  {s:"Hg", n:80, type:"transition",col:12,row:6},
+  {s:"Tl", n:81, type:"metal",    col:13,row:6},
+  {s:"Pb", n:82, type:"metal",    col:14,row:6},
+  {s:"Bi", n:83, type:"metal",    col:15,row:6},
+  {s:"Po", n:84, type:"metal",    col:16,row:6},
+  {s:"At", n:85, type:"nonmetal", col:17,row:6},
+  {s:"Rn", n:86, type:"noble",    col:18,row:6},
+
+  // row 7
+  {s:"Fr", n:87, type:"metal",    col:1, row:7},
+  {s:"Ra", n:88, type:"metal",    col:2, row:7},
+  // Ac placeholder, rest similar to row6 but with heavier trans
+  {s:"Rf", n:104,type:"transition",col:4, row:7},
+  {s:"Db", n:105,type:"transition",col:5, row:7},
+  {s:"Sg", n:106,type:"transition",col:6, row:7},
+  {s:"Bh", n:107,type:"transition",col:7, row:7},
+  {s:"Hs", n:108,type:"transition",col:8, row:7},
+  {s:"Mt", n:109,type:"transition",col:9, row:7},
+  {s:"Ds", n:110,type:"transition",col:10,row:7},
+  {s:"Rg", n:111,type:"transition",col:11,row:7},
+  {s:"Cn", n:112,type:"transition",col:12,row:7},
+  {s:"Nh", n:113,type:"metal",    col:13,row:7},
+  {s:"Fl", n:114,type:"metal",    col:14,row:7},
+  {s:"Mc", n:115,type:"metal",    col:15,row:7},
+  {s:"Lv", n:116,type:"metal",    col:16,row:7},
+  {s:"Ts", n:117,type:"nonmetal", col:17,row:7},
+  {s:"Og", n:118,type:"noble",    col:18,row:7}
+];
+
+// lanthanides (Ce-Lu) numbers 58-71
+const lanthanides = [
+  {s:"Ce", n:58},{s:"Pr", n:59},{s:"Nd", n:60},{s:"Pm", n:61},
+  {s:"Sm", n:62},{s:"Eu", n:63},{s:"Gd", n:64},{s:"Tb", n:65},
+  {s:"Dy", n:66},{s:"Ho", n:67},{s:"Er", n:68},{s:"Tm", n:69},
+  {s:"Yb", n:70},{s:"Lu", n:71}
+];
+
+// actinides (Th-Lr) numbers 90-103
+const actinides = [
+  {s:"Th", n:90},{s:"Pa", n:91},{s:"U",  n:92},{s:"Np", n:93},
+  {s:"Pu", n:94},{s:"Am", n:95},{s:"Cm", n:96},{s:"Bk", n:97},
+  {s:"Cf", n:98},{s:"Es", n:99},{s:"Fm", n:100},{s:"Md", n:101},
+  {s:"No", n:102},{s:"Lr", n:103}
+];
+
+const table = document.getElementById("ptable");
+
+// helper to create element div
+function createElementNode(symbol, number, type) {
+  const d = document.createElement("div");
+  d.className = `pt-element ${type}`;
+  d.setAttribute("role","button");
+  d.setAttribute("aria-label", `${symbol} ${number}`);
+  d.innerHTML = `<div>${symbol}</div><small>${number}</small>`;
+  return d;
+}
+
+// place main elements into the 18x7 grid using inline grid placement
+mainElements.forEach(el => {
+  const node = createElementNode(el.s, el.n, el.type);
+  // set grid column and row start
+  node.style.gridColumnStart = String(el.col);
+  node.style.gridRowStart = String(el.row);
+  table.appendChild(node);
+});
+
+// Put a small placeholder for "La" cell visually in main grid (common table uses a label "La-Lu")
+const laPlaceholder = createElementNode("La–Lu", 57, "lan-act");
+laPlaceholder.style.gridColumnStart = "3"; // visually the 'slot' between Ba (col2) and Hf (col4)
+laPlaceholder.style.gridRowStart = "6"; // row 6 (where lanthanide connector usually sits)
+table.appendChild(laPlaceholder);
+
+// Put Ac-Lr placeholder for row7
+const acPlaceholder = createElementNode("Ac–Lr", 89, "lan-act");
+acPlaceholder.style.gridColumnStart = "3";
+acPlaceholder.style.gridRowStart = "7";
+table.appendChild(acPlaceholder);
+
+// Generate lanthanide row (14 columns)
+const lanRow = document.getElementById("lanRow");
+lanthanides.forEach(item => {
+  const node = createElementNode(item.s, item.n, "lan-act");
+  lanRow.appendChild(node);
+});
+
+// Generate actinide row (14 columns)
+const actRow = document.getElementById("actRow");
+actinides.forEach(item => {
+  const node = createElementNode(item.s, item.n, "lan-act");
+  actRow.appendChild(node);
+});
+
+// done
+</script>
+
+</body>
+</html>
